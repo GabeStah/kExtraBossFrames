@@ -22,7 +22,8 @@ EBF.defaults = {
         loaded = false
       }
     },
-    enabled = true
+    enabled = true,
+    frequency = 0.25
   }
 }
 
@@ -45,6 +46,21 @@ EBF.options = {
         return "Are you sure you want to " ..
           (value and "enable" or "disable") .. " kExtraBossFrames?  This will reload the UI."
       end
+    },
+    frequency = {
+      name = "Update Frequency",
+      type = "range",
+      desc = "Frame update frequency (in seconds).",
+      get = function(info)
+        return EBF.db.profile.frequency
+      end,
+      set = function(info, value)
+        EBF.db.profile.frequency = value
+        EBF:CreateBossFramesTimer()
+      end,
+      min = 0.1,
+      max = 5,
+      step = 0.05
     }
     -- addons = {
     --   type = "group",

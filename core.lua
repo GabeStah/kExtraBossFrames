@@ -1,4 +1,4 @@
-EBF = LibStub("AceAddon-3.0"):NewAddon("kEBF", "AceConsole-3.0", "AceEvent-3.0")
+EBF = LibStub("AceAddon-3.0"):NewAddon("kEBF", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 
 function EBF:OnInitialize()
   -- Load Database
@@ -12,10 +12,16 @@ function EBF:OnInitialize()
   -- Local
   self.addons = {
     elvui = {
-      UF = nil
+      UF = nil,
+      updateCalls = 0
     },
-    loaded = false
+    loaded = false,
+    suf = {
+      updateCalls = 0
+    }
   }
+
+  self.timers = {}
 
   if (not self.db.profile.enabled) then
     return
@@ -29,6 +35,28 @@ function EBF:OnInitialize()
   end
 
   MAX_BOSS_FRAMES = 8
-  self.updateFrame = CreateFrame("Frame", "kExtraBossFramesUpdateFrame", UIParent)
+  
   self:RegisterEvents()
+end
+
+function EBF:OnEnable()
+  self:CreateBossFramesTimer()
+end
+
+function EBF:OnDisable()
+  self:CancelAllTimers()
+end
+
+function EBF:CreateBossFramesTimer()
+  self:CancelTimer(self.timers.boss)
+  self.timers.boss = self:ScheduleRepeatingTimer("UpdateBossFrames", self.db.profile.frequency)
+end
+
+function EBF:UpdateBossFrames()
+  if (self.db.profile.addons.elvui.enabled) then
+    self:Addons_ElvUI_Update()
+  end
+  if (self.db.profile.addons.suf.enabled) then
+    self:Addons_ShadowedUnitFrames_Update()
+  end
 end

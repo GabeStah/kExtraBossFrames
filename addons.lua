@@ -48,13 +48,12 @@ function EBF:Addons_SetAddOnLoaded(name)
     if addon.name == name then
       addon.loaded = true
       if (name == "ElvUI" and self.db.profile.addons.elvui.enabled) then
-        self:Print("ElvUI registered.")
         local E = unpack(ElvUI)
         self.addons.elvui.UF = E:GetModule("UnitFrames")
+        self:Print("ElvUI registered.")
       end
       if (name == "ShadowedUnitFrames" and self.db.profile.addons.suf.enabled) then
         self:Print("ShadowedUnitFrames registered.")
-        self:Addons_ShadowedUnitFrames_RegisterEvents()
       end
     end
   end

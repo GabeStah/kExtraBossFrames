@@ -63,7 +63,13 @@ function EBF:Addons_ElvUI_Update()
     return
   end
 
-  for i = 1, 8 do
-    EBF:Addons_ElvUI_UpdateBossFrames(_G["ElvUF_Boss" .. i])
+  for i = 6, 8 do
+    local unit = "boss" .. i
+    if (UnitExists(unit)) then
+      local frame = _G["ElvUF_" .. unit:gsub("^%l", string.upper)]
+      if (frame) then
+        self:Addons_ElvUI_UpdateBossFrames(frame)
+      end
+    end
   end
 end
